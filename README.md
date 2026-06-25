@@ -106,7 +106,7 @@ Mesmo em ambiente simulado, o projeto considera:
 ## Como executar o projeto  
 
 ### clonar repositório
-git clone https://github.com/seuusuario/paypulse
+git clone https://github.com/jdevc9/paypulse
 
 ### entrar no diretório
 cd paypulse
