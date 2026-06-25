@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Contatos — PayPulse{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Meus Contatos</h1>
+    <p class="page-subtitle">{{ contacts|length }} contato(s)</p>
+  </div>
+  <a href="{{ url_for('contacts.find_people') }}" class="btn btn-primary">+ Encontrar Pessoas</a>
+</div>
+
+<form method="GET" action="{{ url_for('contacts.contacts') }}" class="mb-6">
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q" class="search-input" placeholder="Filtrar contatos..." value="{{ query }}">
+  </div>
+</form>
+
+{% if contacts %}
+<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));gap:12px;">
+  {% for contact in contacts %}
+  <div class="contact-card">
+    <div class="avatar">{{ contact.avatar_initials }}</div>
+    <div class="contact-info">
+      <div class="contact-name">{{ contact.name }}</div>
+      <div class="contact-handle">@{{ contact.username }}</div>
+      <div class="contact-handle" style="margin-top:2px;">{{ contact.email }}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <a href="{{ url_for('transactions.send', to=contact.id) }}" class="btn btn-success btn-sm">↗ Enviar</a>
+      <a href="{{ url_for('transactions.request_money', **{'from': contact.id}) }}" class="btn btn-secondary btn-sm">↙ Cobrar</a>
+      <form method="POST" action="{{ url_for('contacts.remove_contact', contact_id=contact.id) }}">
+        <button class="btn btn-danger btn-sm w-full" type="submit">✕</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">👥</div>
+  <div class="empty-title">
+    {% if query %}Nenhum contato corresponde a "{{ query }}"{% else %}Você ainda não tem contatos{% endif %}
+  </div>
+  <div class="empty-desc">Encontre pessoas para adicionar à sua lista de contatos</div>
+  <a href="{{ url_for('contacts.find_people') }}" class="btn btn-primary mt-4">Encontrar Pessoas</a>
+</div>
+{% endif %}
+{% endblock %}

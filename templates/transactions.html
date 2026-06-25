@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block title %}Histórico — PayPulse{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Histórico de Transações</h1>
+    <p class="page-subtitle">{{ transactions|length }} transação(ões) encontrada(s)</p>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <a href="{{ url_for('transactions.send') }}" class="btn btn-primary btn-sm">↗ Enviar</a>
+    <a href="{{ url_for('transactions.request_money') }}" class="btn btn-secondary btn-sm">↙ Cobrar</a>
+  </div>
+</div>
+
+<!-- FILTER TABS -->
+<div class="tabs">
+  <a href="{{ url_for('transactions.history', type='all') }}" class="tab {{ 'active' if filter_type == 'all' }}">Todas</a>
+  <a href="{{ url_for('transactions.history', type='received') }}" class="tab {{ 'active' if filter_type == 'received' }}">Recebidas</a>
+  <a href="{{ url_for('transactions.history', type='sent') }}" class="tab {{ 'active' if filter_type == 'sent' }}">Enviadas</a>
+  <a href="{{ url_for('transactions.history', type='pending') }}" class="tab {{ 'active' if filter_type == 'pending' }}">Pendentes</a>
+</div>
+
+<div class="card">
+  <div class="txn-list">
+    {% if transactions %}
+      {% for txn in transactions %}
+      {% set is_sent = txn.sender_id == current_user.id %}
+      {% set other = txn.receiver if is_sent else txn.sender %}
+      <div class="txn-item" style="border-bottom: 1px solid var(--border);">
+        <div class="txn-icon {{ 'sent' if is_sent else ('pending' if txn.status == 'pending' else 'received') }}">
+          {{ '↗' if is_sent else ('⏳' if txn.status == 'pending' else '↙') }}
+        </div>
+        <div class="txn-info">
+          <div class="txn-name">{{ other.name }}</div>
+          <div class="txn-desc">{{ txn.description or 'Transferência' }}</div>
+          <div class="txn-date">{{ txn.created_at.strftime('%d/%m/%Y às %H:%M') }} · #{{ txn.transaction_id }}</div>
+        </div>
+        <div class="txn-amount {{ 'sent' if is_sent else ('pending' if txn.status == 'pending' else 'received') }}">
+          <div class="txn-amount-value">
+            {{ '-' if is_sent else '+' }} R$ {{ '%.2f'|format(txn.amount)|replace('.', ',') }}
+          </div>
+          <div style="margin-top:4px;">
+            {% if txn.status == 'pending' %}
+              <span class="badge badge-yellow">Pendente</span>
+            {% elif txn.status == 'completed' %}
+              <span class="badge badge-green">Concluído</span>
+            {% else %}
+              <span class="badge badge-red">Falhou</span>
+            {% endif %}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-left:8px;">
+          {% if not is_sent %}
+          <a href="{{ url_for('transactions.send', to=other.id) }}" class="btn btn-success btn-sm">↗</a>
+          {% else %}
+          <a href="{{ url_for('transactions.request_money', **{'from': other.id}) }}" class="btn btn-secondary btn-sm">↙</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">Nenhuma transação encontrada</div>
+        <div class="empty-desc">Comece enviando dinheiro para alguém!</div>
+        <a href="{{ url_for('transactions.send') }}" class="btn btn-primary mt-4">Fazer primeira transação</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

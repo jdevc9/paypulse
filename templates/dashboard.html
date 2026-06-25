@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block title %}Início — PayPulse{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Olá, {{ current_user.name.split()[0] }} 👋</h1>
+    <p class="page-subtitle">Aqui está o resumo da sua conta hoje</p>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <a href="{{ url_for('transactions.send') }}" class="btn btn-primary">↗ Enviar</a>
+    <a href="{{ url_for('transactions.request_money') }}" class="btn btn-secondary">↙ Cobrar</a>
+  </div>
+</div>
+
+<!-- BALANCE CARD -->
+<div class="balance-card mb-6">
+  <div class="balance-label">Saldo disponível</div>
+  <div class="balance-amount">
+    <span class="balance-currency">R$</span>
+    {{ '%.2f'|format(current_user.balance)|replace('.', ',') }}
+  </div>
+  <div style="margin-top: 16px; display:flex; gap:24px;">
+    <div>
+      <div style="font-size:12px;color:var(--text-3);">Total enviado</div>
+      <div style="font-size:16px;font-weight:700;color:var(--red);">- R$ {{ '%.2f'|format(sent_total)|replace('.', ',') }}</div>
+    </div>
+    <div>
+      <div style="font-size:12px;color:var(--text-3);">Total recebido</div>
+      <div style="font-size:16px;font-weight:700;color:var(--green);">+ R$ {{ '%.2f'|format(received_total)|replace('.', ',') }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
+  <a href="{{ url_for('transactions.send') }}" class="quick-action">
+    <div class="quick-action-icon">↗️</div>
+    <div class="quick-action-label">Enviar</div>
+  </a>
+  <a href="{{ url_for('transactions.request_money') }}" class="quick-action">
+    <div class="quick-action-icon">↙️</div>
+    <div class="quick-action-label">Cobrar</div>
+  </a>
+  <a href="{{ url_for('contacts.find_people') }}" class="quick-action">
+    <div class="quick-action-icon">🧭</div>
+    <div class="quick-action-label">Encontrar</div>
+  </a>
+  <a href="{{ url_for('transactions.history') }}" class="quick-action">
+    <div class="quick-action-icon">📋</div>
+    <div class="quick-action-label">Histórico</div>
+  </a>
+</div>
+
+<div class="grid-2">
+  <!-- RECENT TRANSACTIONS -->
+  <div class="card">
+    <div class="section-header">
+      <div class="section-title">Atividade Recente</div>
+      <a href="{{ url_for('transactions.history') }}" class="btn btn-ghost btn-sm">Ver tudo</a>
+    </div>
+    <div class="txn-list">
+      {% if transactions %}
+        {% for txn in transactions %}
+        {% set is_sent = txn.sender_id == current_user.id %}
+        {% set other = txn.receiver if is_sent else txn.sender %}
+        <div class="txn-item">
+          <div class="txn-icon {{ 'sent' if is_sent else 'received' }}">
+            {{ '↗' if is_sent else '↙' }}
+          </div>
+          <div class="txn-info">
+            <div class="txn-name">{{ other.name }}</div>
+            <div class="txn-desc">{{ txn.description or 'Transferência' }}</div>
+          </div>
+          <div class="txn-amount {{ 'sent' if is_sent else 'received' }}">
+            <div class="txn-amount-value">{{ '-' if is_sent else '+' }} R$ {{ '%.2f'|format(txn.amount)|replace('.', ',') }}</div>
+            <div class="txn-amount-label">{{ txn.created_at.strftime('%d/%m') }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state" style="padding: 30px 0;">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">Sem transações</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div class="card">
+    <div class="section-header">
+      <div class="section-title">Contatos Rápidos</div>
+      <a href="{{ url_for('contacts.contacts') }}" class="btn btn-ghost btn-sm">Ver todos</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      {% for contact in contacts %}
+      <div class="contact-card" style="margin-bottom: 0;">
+        <div class="avatar">{{ contact.avatar_initials }}</div>
+        <div class="contact-info">
+          <div class="contact-name">{{ contact.name }}</div>
+          <div class="contact-handle">@{{ contact.username }}</div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <a href="{{ url_for('transactions.send', to=contact.id) }}" class="btn btn-success btn-sm">Enviar</a>
+          <a href="{{ url_for('transactions.request_money', **{'from': contact.id}) }}" class="btn btn-secondary btn-sm">Cobrar</a>
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state" style="padding: 30px 0;">
+        <div class="empty-icon">👥</div>
+        <div class="empty-title">Sem contatos</div>
+        <a href="{{ url_for('contacts.find_people') }}" class="btn btn-secondary btn-sm mt-2">Encontrar pessoas</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

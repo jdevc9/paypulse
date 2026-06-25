@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}PayPulse — Transferências Simples e Rápidas{% endblock %}
+{% block body %}
+<div class="landing">
+  <nav class="landing-nav">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">PayPulse</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <a href="{{ url_for('help.help_page') }}" class="btn btn-ghost btn-sm">Ajuda</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Entrar</a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Criar Conta</a>
+    </div>
+  </nav>
+
+  <section class="landing-hero">
+    <div class="hero-badge">✨ Projeto Demonstração</div>
+    <h1 class="hero-title">
+      Mova dinheiro<br>
+      na <span class="accent">velocidade</span><br>
+      do pensamento
+    </h1>
+    <p class="hero-subtitle">Envie, receba e gerencie pagamentos entre amigos. Rápido, seguro e sem complicação.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Começar Grátis</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-lg">Já tenho conta</a>
+    </div>
+
+    <div style="margin-top: 16px; font-size: 13px; color: var(--text-3);">
+      🎁 Ganhe R$ 1.000,00 de bônus ao criar sua conta demo
+    </div>
+
+    <!-- Demo login hint -->
+    <div style="margin-top: 40px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 400px; text-align: left;">
+      <div style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 12px;">🔑 Conta demo disponível:</div>
+      <div style="font-size: 13px; color: var(--text-3); font-family: monospace;">
+        Email: <strong style="color: var(--accent-light);">joao@demo.com</strong><br>
+        Senha: <strong style="color: var(--accent-light);">demo123</strong>
+      </div>
+    </div>
+  </section>
+
+  <div class="features-grid" style="margin-bottom: 80px;">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Transferência Instantânea</div>
+      <div class="feature-desc">Envie dinheiro para qualquer pessoa em segundos, sem taxas ocultas.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Segurança Total</div>
+      <div class="feature-desc">Suas transações protegidas com criptografia de ponta-a-ponta.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Histórico Completo</div>
+      <div class="feature-desc">Acompanhe todas as suas movimentações em um só lugar.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

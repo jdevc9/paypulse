@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %}Ajuda — PayPulse{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Central de Ajuda</h1>
+  <p class="page-subtitle">Encontre respostas para suas dúvidas</p>
+</div>
+
+<div class="help-grid">
+  <!-- HELP NAV -->
+  <div class="help-nav">
+    <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;padding:4px 14px;margin-bottom:8px;">Tópicos</div>
+    <a href="{{ url_for('help.help_page', topic='inicio') }}" class="help-nav-item {{ 'active' if topic == 'inicio' or not topic }}">🏠 Primeiros Passos</a>
+    <a href="{{ url_for('help.help_page', topic='enviar') }}" class="help-nav-item {{ 'active' if topic == 'enviar' }}">↗️ Enviar Dinheiro</a>
+    <a href="{{ url_for('help.help_page', topic='cobrar') }}" class="help-nav-item {{ 'active' if topic == 'cobrar' }}">↙️ Cobrar Alguém</a>
+    <a href="{{ url_for('help.help_page', topic='contatos') }}" class="help-nav-item {{ 'active' if topic == 'contatos' }}">👥 Contatos</a>
+    <a href="{{ url_for('help.help_page', topic='seguranca') }}" class="help-nav-item {{ 'active' if topic == 'seguranca' }}">🔒 Segurança</a>
+    <a href="{{ url_for('help.help_page', topic='conta') }}" class="help-nav-item {{ 'active' if topic == 'conta' }}">👤 Minha Conta</a>
+  </div>
+
+  <!-- HELP CONTENT -->
+  <div class="help-content">
+    {% if not topic or topic == 'inicio' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">🏠 Primeiros Passos</h2>
+    <div class="help-section">
+      <div class="help-q">O que é o PayPulse?</div>
+      <div class="help-a">PayPulse é uma plataforma de transferência de pagamentos estilo PayPal, criada como projeto de demonstração. Você pode enviar dinheiro, cobrar pessoas, gerenciar contatos e visualizar seu histórico completo.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">Como faço para começar?</div>
+      <div class="help-a">Crie uma conta gratuita, receba R$ 1.000 de bônus, adicione contatos e comece a enviar ou cobrar dinheiro. Tudo é simulado, sem dinheiro real envolvido.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">Posso usar contas demo?</div>
+      <div class="help-a">Sim! Use <strong>joao@demo.com</strong> com senha <strong>demo123</strong> para testar. Há 6 usuários pré-cadastrados com saldos e histórico de transações para explorar.</div>
+    </div>
+
+    {% elif topic == 'enviar' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">↗️ Enviar Dinheiro</h2>
+    <div class="help-section">
+      <div class="help-q">Como envio dinheiro para alguém?</div>
+      <div class="help-a">Clique em "Enviar" no menu lateral. Digite o nome ou email da pessoa no campo de busca, informe o valor e uma descrição opcional, depois clique em "Enviar Agora".</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">Existe valor mínimo ou máximo?</div>
+      <div class="help-a">Valor mínimo: R$ 0,01. Valor máximo: seu saldo disponível. Não há taxas neste demo.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">As transferências são instantâneas?</div>
+      <div class="help-a">Sim! No PayPulse Demo, todas as transferências são processadas imediatamente. O saldo do remetente é debitado e o do destinatário é creditado na hora.</div>
+    </div>
+
+    {% elif topic == 'cobrar' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">↙️ Cobrar Alguém</h2>
+    <div class="help-section">
+      <div class="help-q">Como faço uma cobrança?</div>
+      <div class="help-a">Clique em "Cobrar" no menu, selecione a pessoa que você quer cobrar, informe o valor e o motivo (ex: "almoço de ontem"), e envie a cobrança.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">A cobrança fica como pendente?</div>
+      <div class="help-a">Sim. A cobrança fica com status "Pendente" no histórico até que a outra pessoa realize o pagamento. Você pode ver todas as cobranças pendentes na aba "Pendentes" do histórico.</div>
+    </div>
+
+    {% elif topic == 'contatos' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">👥 Contatos</h2>
+    <div class="help-section">
+      <div class="help-q">Como adiciono um contato?</div>
+      <div class="help-a">Vá em "Encontrar Pessoas", busque pelo nome ou email e clique em "+ Adicionar". Você também pode adicionar direto da tela de pesquisa global.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">Para que servem os contatos?</div>
+      <div class="help-a">Contatos facilitam pagamentos rápidos. Na tela inicial, você vê seus contatos frequentes e pode enviar ou cobrar com um clique, sem precisar buscar a cada vez.</div>
+    </div>
+
+    {% elif topic == 'seguranca' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">🔒 Segurança</h2>
+    <div class="help-section">
+      <div class="help-q">Meus dados estão seguros?</div>
+      <div class="help-a">Este é um projeto de demonstração. As senhas são armazenadas com hash bcrypt. Nenhum dado financeiro real é processado. Não use senhas reais neste sistema.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">O saldo é dinheiro real?</div>
+      <div class="help-a">Não! Todo saldo e transações são simulados. Nenhum valor real é movimentado. É apenas um demo educacional de como sistemas de pagamento funcionam.</div>
+    </div>
+
+    {% elif topic == 'conta' %}
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:20px;">👤 Minha Conta</h2>
+    <div class="help-section">
+      <div class="help-q">Como altero meu nome ou senha?</div>
+      <div class="help-a">Acesse "Perfil" no menu lateral. Lá você pode editar seu nome, telefone, bio e alterar sua senha.</div>
+    </div>
+    <div class="help-section">
+      <div class="help-q">Esqueci minha senha. O que faço?</div>
+      <div class="help-a">Neste demo, use a conta de demonstração (joao@demo.com / demo123). Recuperação de senha por email não está implementada nesta versão.</div>
+    </div>
+    {% endif %}
+
+    <hr class="divider">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="{{ url_for('dashboard.home') }}" class="btn btn-secondary btn-sm">← Voltar ao Início</a>
+      <a href="{{ url_for('transactions.send') }}" class="btn btn-primary btn-sm">Fazer uma transferência</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

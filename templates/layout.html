@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">PayPulse</span>
+    </div>
+
+    <div class="nav-section">Principal</div>
+    <a href="{{ url_for('dashboard.home') }}" class="nav-link {% if request.endpoint == 'dashboard.home' %}active{% endif %}">
+      <span class="nav-icon">🏠</span> Início
+    </a>
+    <a href="{{ url_for('transactions.send') }}" class="nav-link {% if request.endpoint == 'transactions.send' %}active{% endif %}">
+      <span class="nav-icon">↗️</span> Enviar
+    </a>
+    <a href="{{ url_for('transactions.request_money') }}" class="nav-link {% if request.endpoint == 'transactions.request_money' %}active{% endif %}">
+      <span class="nav-icon">↙️</span> Cobrar
+    </a>
+    <a href="{{ url_for('transactions.history') }}" class="nav-link {% if request.endpoint == 'transactions.history' %}active{% endif %}">
+      <span class="nav-icon">📋</span> Histórico
+    </a>
+    <a href="{{ url_for('dashboard.search') }}" class="nav-link {% if request.endpoint == 'dashboard.search' %}active{% endif %}">
+      <span class="nav-icon">🔍</span> Pesquisar
+    </a>
+
+    <div class="nav-section" style="margin-top: 20px;">Pessoas</div>
+    <a href="{{ url_for('contacts.contacts') }}" class="nav-link {% if request.endpoint == 'contacts.contacts' %}active{% endif %}">
+      <span class="nav-icon">👥</span> Contatos
+    </a>
+    <a href="{{ url_for('contacts.find_people') }}" class="nav-link {% if request.endpoint == 'contacts.find_people' %}active{% endif %}">
+      <span class="nav-icon">🧭</span> Encontrar Pessoas
+    </a>
+
+    <div class="nav-section" style="margin-top: 20px;">Conta</div>
+    <a href="{{ url_for('profile.profile') }}" class="nav-link {% if request.endpoint == 'profile.profile' %}active{% endif %}">
+      <span class="nav-icon">👤</span> Perfil
+    </a>
+    <a href="{{ url_for('help.help_page') }}" class="nav-link {% if request.endpoint == 'help.help_page' %}active{% endif %}">
+      <span class="nav-icon">❓</span> Ajuda
+    </a>
+
+    <div class="nav-spacer"></div>
+
+    <div class="sidebar-user">
+      <div class="avatar sm">{{ current_user.avatar_initials }}</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">{{ current_user.name }}</div>
+        <div class="sidebar-user-email">{{ current_user.email }}</div>
+      </div>
+      <a href="{{ url_for('auth.logout') }}" title="Sair" style="color: var(--text-3); font-size: 18px; margin-left: 4px; text-decoration: none;">⎋</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category == 'success' else 'error' if category == 'error' else 'info' }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

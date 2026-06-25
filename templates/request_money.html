@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block title %}Cobrar — PayPulse{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Cobrar Alguém</h1>
+  <p class="page-subtitle">Envie uma cobrança para um contato</p>
+</div>
+
+<div style="max-width: 540px;">
+  <div class="card">
+    <form method="POST" action="{{ url_for('transactions.request_money') }}">
+
+      <div class="form-group">
+        <label class="form-label">Cobrar quem?</label>
+        <div style="position:relative;">
+          <input type="text" id="recipient-search" class="form-input" placeholder="Buscar pessoa..."
+            value="{{ prefill_user.name if prefill_user else '' }}" autocomplete="off">
+          <input type="hidden" name="from_id" id="recipient-id" value="{{ prefill_user.id if prefill_user else '' }}">
+          <div id="autocomplete" class="autocomplete-box" style="display:none;"></div>
+        </div>
+      </div>
+
+      {% if prefill_user %}
+      <div style="margin-top:-12px;margin-bottom:20px;display:flex;align-items:center;gap:10px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);border:1px solid var(--border);">
+        <div class="avatar">{{ prefill_user.avatar_initials }}</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">{{ prefill_user.name }}</div>
+          <div style="font-size:12px;color:var(--text-3);">@{{ prefill_user.username }}</div>
+        </div>
+        <div class="badge badge-purple" style="margin-left:auto;">Selecionado ✓</div>
+      </div>
+      {% endif %}
+
+      <div id="selected-user" style="display:none;margin-top:-12px;margin-bottom:20px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="avatar" id="sel-avatar"></div>
+          <div>
+            <div id="sel-name" style="font-size:14px;font-weight:600;"></div>
+            <div id="sel-email" style="font-size:12px;color:var(--text-3);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Valor a cobrar</label>
+        <div style="position:relative;">
+          <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-weight:600;">R$</span>
+          <input type="number" name="amount" class="form-input" style="padding-left:40px;" placeholder="0,00" step="0.01" min="0.01" required>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:-12px;margin-bottom:20px;">
+        {% for val in [10, 25, 50, 100, 200] %}
+        <button type="button" onclick="document.querySelector('input[name=amount]').value='{{ val }}.00'" class="btn btn-secondary btn-sm">R$ {{ val }}</button>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Motivo da cobrança</label>
+        <input type="text" name="description" class="form-input" placeholder="Almoço de ontem, uber dividido...">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar Cobrança ↙</button>
+    </form>
+  </div>
+
+  <div class="card card-sm mt-4" style="background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.2);">
+    <div style="font-size:13px;color:var(--text-2);">
+      📨 A cobrança ficará pendente até que a pessoa aceite e realize o pagamento.
+    </div>
+  </div>
+</div>
+
+<script>
+const searchInput = document.getElementById('recipient-search');
+const autocomplete = document.getElementById('autocomplete');
+const recipientId = document.getElementById('recipient-id');
+const selectedUser = document.getElementById('selected-user');
+
+let debounce;
+searchInput.addEventListener('input', () => {
+  clearTimeout(debounce);
+  debounce = setTimeout(async () => {
+    const q = searchInput.value.trim();
+    if (q.length < 2) { autocomplete.style.display = 'none'; return; }
+    const res = await fetch(`/api/user-search?q=${encodeURIComponent(q)}`);
+    const users = await res.json();
+    if (!users.length) { autocomplete.style.display = 'none'; return; }
+    autocomplete.innerHTML = users.map(u => `
+      <div class="autocomplete-item" onclick="selectUser(${u.id}, '${u.name}', '${u.email}', '${u.avatar}', '${u.username}')">
+        <div class="avatar sm">${u.avatar}</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">${u.name}</div>
+          <div style="font-size:12px;color:var(--text-3);">@${u.username}</div>
+        </div>
+      </div>
+    `).join('');
+    autocomplete.style.display = 'block';
+  }, 200);
+});
+
+function selectUser(id, name, email, avatar, username) {
+  recipientId.value = id;
+  searchInput.value = name;
+  autocomplete.style.display = 'none';
+  document.getElementById('sel-avatar').textContent = avatar;
+  document.getElementById('sel-name').textContent = name;
+  document.getElementById('sel-email').textContent = `@${username}`;
+  selectedUser.style.display = 'block';
+}
+
+document.addEventListener('click', e => { if (!searchInput.contains(e.target)) autocomplete.style.display = 'none'; });
+</script>
+{% endblock %}
