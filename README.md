@@ -34,7 +34,8 @@ Pagamentos não são um problema de “código funcionando” — são um proble
   
 * Registrador histórico transacional
 
-<img width="1366" height="745" alt="screencapture-127-0-0-1-5000-send-2026-06-25-05_45_44" src="https://github.com/user-attachments/assets/36dd80bc-f56e-44de-9be2-0a5194919825" />
+<img width="1366" height="1189" alt="screencapture-127-0-0-1-5000-dashboard-2026-06-25-05_51_16" src="https://github.com/user-attachments/assets/1e982b23-4eac-4920-a33b-04a7e3dc8777" />
+
 
 
 ---
