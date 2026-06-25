@@ -29,12 +29,15 @@ Pagamentos não são um problema de “código funcionando” — são um proble
 
 * Consultar saldo e extratos
 
-<img width="1366" height="1419" alt="screencapture-127-0-0-1-5000-transactions-2026-06-25-05_45_58" src="https://github.com/user-attachments/assets/ce445603-5458-4868-919b-2834d0e8830d" />
+<img width="1366" height="1189" alt="screencapture-127-0-0-1-5000-dashboard-2026-06-25-05_51_16" src="https://github.com/user-attachments/assets/84870c83-58a7-42f3-b1e0-503076c0a1a4" />
+
 
   
 * Registrador histórico transacional
 
-<img width="1366" height="1189" alt="screencapture-127-0-0-1-5000-dashboard-2026-06-25-05_51_16" src="https://github.com/user-attachments/assets/1e982b23-4eac-4920-a33b-04a7e3dc8777" />
+<img width="1366" height="1419" alt="screencapture-127-0-0-1-5000-transactions-2026-06-25-05_45_58" src="https://github.com/user-attachments/assets/ad7d909b-885d-475f-bdec-b4c984f8c05f" />
+
+
 
 
 
